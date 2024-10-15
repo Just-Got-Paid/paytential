@@ -22,8 +22,7 @@ class User {
   // This instance method takes in a plain-text password and returns true if it matches
   // the User instance's hashed password. Can be used by controllers.
   isValidPassword = async (password) => {
-    console.log("Plain Password:", password);  // Log the plain password
-    console.log("Hashed Password:", this.#passwordHash);  // Log the hashed password
+    console.log('Comparing passwords:', password, this.#passwordHash)
     return authUtils.isValidPassword(password, this.#passwordHash);  // Compare the plain and hashed passwords
   };
   
@@ -47,8 +46,9 @@ class User {
   }
 
   // Same as above but uses the name to find the user
-  static async findByUsername(name) {  // Changed "username" to "name"
-    const query = `SELECT * FROM users WHERE name = ?`;  // Querying the "name" column
+  static async findByUsername(name) {
+    console.log('Finding user by username:', name);
+    const query = `SELECT * FROM users WHERE name = ?`;
     const result = await knex.raw(query, [name]);
     const rawUserData = result.rows[0];
     return rawUserData ? new User(rawUserData) : null;
@@ -103,14 +103,14 @@ class User {
 
   // Updates the user that matches the given id with a new name.
   // Returns the modified user, using the constructor to hide the passwordHash.
-  static async update(id, name) {  // Changed "username" to "name"
+  static async update(id, name) {
     const query = `
       UPDATE users
       SET name=?
       WHERE id=?
       RETURNING *
     `;
-    const result = await knex.raw(query, [name, id]);  // Using "name" instead of "username"
+    const result = await knex.raw(query, [name, id]);
     const rawUpdatedUser = result.rows[0];
     return rawUpdatedUser ? new User(rawUpdatedUser) : null;
   };

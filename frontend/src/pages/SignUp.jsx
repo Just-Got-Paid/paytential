@@ -12,7 +12,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [organizationName, setOrganizationName] = useState('');
-  const [score, setScore] = useState(0); // New score state, default is 0
+  
 
   if (currentUser) return <Navigate to={`/users/${currentUser.id}`} />;
 
