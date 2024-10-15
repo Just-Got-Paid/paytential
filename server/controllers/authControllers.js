@@ -32,3 +32,5 @@ exports.showMe = async (req, res) => {
   const user = await User.find(req.session.userId);
   res.send(user);
 };
+
+

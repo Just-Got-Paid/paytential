@@ -9,11 +9,14 @@ const express = require('express');
 // middleware imports
 const handleCookieSessions = require('./middleware/handleCookieSessions');
 const logRoutes = require('./middleware/logRoutes');
-const checkAuthentication = require('./middleware/checkAuthentication');
+const { checkAuthentication, authorizeRole } = require('./middleware/checkAuthentication');
+
 
 // controller imports
 const authControllers = require('./controllers/authControllers');
 const userControllers = require('./controllers/userControllers');
+const budgetControllers = require('./controllers/budgetControllers')
+const { getUsersByOrganization } = require('./controllers/userControllers');
 const app = express();
 
 // middleware
@@ -42,11 +45,22 @@ app.post('/api/users', userControllers.createUser);
 
 // These actions require users to be logged in (authentication)
 // Express lets us pass a piece of middleware to run for a specific endpoint
-app.get('/api/users', checkAuthentication, userControllers.listUsers);
+app.get('/api/users', checkAuthentication,authorizeRole('admin'), userControllers.listUsers);
 app.get('/api/users/:id', checkAuthentication, userControllers.showUser);
 app.patch('/api/users/:id', checkAuthentication, userControllers.updateUser);
 
+///////////////////////////////
+// Budget Routes
+///////////////////////////////
+app.post('/api/budgets', checkAuthentication, budgetControllers.createBudget);
+app.get('/api/budgets/:simulation_id', checkAuthentication, budgetControllers.getBudgetsBySimulation);
+app.patch('/api/budgets/:id', checkAuthentication, budgetControllers.updateBudget);
+app.delete('/api/budgets/:id', checkAuthentication, budgetControllers.deleteBudget);
 
+///////////////////////////////
+// Organization Routes
+///////////////////////////////
+app.get('/api/organizations/:organizationId/users', checkAuthentication, getUsersByOrganization);
 
 ///////////////////////////////
 // Fallback Route
