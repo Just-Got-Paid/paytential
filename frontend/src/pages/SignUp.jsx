@@ -11,7 +11,7 @@ export default function SignUpPage() {
   const [errorText, setErrorText] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('')
+  const [userType, setUserType] = useState('');
 
   // users shouldn't be able to see the sign up page if they are already logged in.
   // if the currentUser exists in the context, navigate the user to 
@@ -60,7 +60,7 @@ export default function SignUpPage() {
         onChange={handleChange}
         value={password}
       />
-     <label htmlFor="userType">Are you an admin or a student?</label>
+      <label htmlFor="userType">Are you an admin or a student?</label>
       <select
         id="userType"
         name="userType"
