@@ -10,13 +10,8 @@ export default function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
-<<<<<<< HEAD
-  const [userType, setUserType] = useState('');
-=======
   const [role, setRole] = useState('');
   const [organizationName, setOrganizationName] = useState('');
-  
->>>>>>> main
 
   if (currentUser) return <Navigate to={`/users/${currentUser.id}`} />;
 
@@ -29,8 +24,9 @@ export default function SignUpPage() {
       return setErrorText('Please fill all fields.');
     }
 
-    const [user, error] = await createUser({ name, email, password, role, organizationName, score });
+    const [user, error] = await createUser({ name, email, password, role, organizationName });
     if (error) return setErrorText(error.message);
+    console.log(user)
 
     setCurrentUser(user);
     navigate('/');
