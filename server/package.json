@@ -13,7 +13,8 @@
     "migrate:rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "seed:make": "knex seed:make",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "migrate:up": "knex migrate:up 20241011211452_create_tables.js"
   },
   "keywords": [],
   "author": "",

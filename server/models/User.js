@@ -47,11 +47,18 @@ class User {
 
 
   // Same as above but uses the username to find the user
-  static async findByUsername(username) {
-    const query = `SELECT * FROM users WHERE username = ?`;
-    const result = await knex.raw(query, [username]);
+  static async findByUsername(name) {
+    const query = `SELECT * FROM users WHERE name = ?`;
+    const result = await knex.raw(query, [name]);
     const rawUserData = result.rows[0];
     return rawUserData ? new User(rawUserData) : null;
+    // try {
+    //   const rawUserData = await knex('users').whereRaw('LOWER(name) = LOWER(?)', [username]).first();
+    //   return rawUserData ? new User(rawUserData) : null;
+    // } catch (error) {
+    //   console.error('Database query error:', error);
+    //   throw error; // handle the error as needed
+    // }
   }
 
   // Hashes the given password and then creates a new user
