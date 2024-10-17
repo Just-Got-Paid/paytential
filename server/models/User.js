@@ -9,10 +9,10 @@ class User {
   // static methods to hide the hashed password of users before sending user data 
   // to the client. Since we want to keep the #passwordHash property private, we 
   // provide the isValidPassword instance method as a way to indirectly access it.
-  constructor({ id, username, password_hash, email, role, score, organization_id }) {
+  constructor({ id, name, password, email, role, score, organization_id }) {
     this.id = id;
-    this.username = username;
-    this.#passwordHash = password_hash;
+    this.name = name; // Updated from "username" to "name" to match your DB
+    this.#passwordHash = password;
     this.email = email;
     this.role = role;
     this.score = score;
@@ -21,11 +21,11 @@ class User {
 
   // This instance method takes in a plain-text password and returns true if it matches
   // the User instance's hashed password. Can be used by controllers.
-  isValidPassword = async (password) => (
-    authUtils.isValidPassword(password, this.#passwordHash)
-  );
-
-
+  isValidPassword = async (password) => {
+    console.log('Comparing passwords:', password, this.#passwordHash)
+    return authUtils.isValidPassword(password, this.#passwordHash);  // Compare the plain and hashed passwords
+  };
+  
 
   // Fetches ALL users from the users table, uses the constructor
   // to format each user (and hide their password hash), and returns.
@@ -45,9 +45,9 @@ class User {
     return rawUserData ? new User(rawUserData) : null;
   }
 
-
-  // Same as above but uses the username to find the user
+  // Same as above but uses the name to find the user
   static async findByUsername(name) {
+    console.log('Finding user by username:', name);
     const query = `SELECT * FROM users WHERE name = ?`;
     const result = await knex.raw(query, [name]);
     const rawUserData = result.rows[0];
@@ -63,45 +63,80 @@ class User {
 
   // Hashes the given password and then creates a new user
   // in the users table. Returns the newly created user, using
-  // the constructor to hide the passwordHash. 
-  static async create(username, password, email, role, score = 0, organization_id = null) {
-    // hash the plain-text password using bcrypt before storing it in the database
+  // the constructor to hide the passwordHash.
+  static async create(name, password, email, role, score, organizationName) {
+    // First, check if the organization exists
+    let orgQuery = `SELECT id FROM organizations WHERE name = ?`;
+    let orgResult = await knex.raw(orgQuery, [organizationName]);
+
+    let organization_id;
+
+    if (orgResult.rows.length === 0) {
+      try {
+        // If the organization doesn't exist, insert it
+        const insertOrgQuery = `INSERT INTO organizations (name) VALUES (?) RETURNING id`;
+        const newOrgResult = await knex.raw(insertOrgQuery, [organizationName]);
+        organization_id = newOrgResult.rows[0].id;  // Get the newly created organization ID
+      } catch (error) {
+        // Handle any error with the insertion, like a race condition where the organization
+        // was inserted between the select and insert statements
+        if (error.code === '23505') {  // Unique violation error code
+          const existingOrg = await knex.raw(orgQuery, [organizationName]);
+          organization_id = existingOrg.rows[0].id;  // Get the existing organization ID
+        } else {
+          throw error;  // Re-throw other errors
+        }
+      }
+    } else {
+      // If the organization exists, use its ID
+      organization_id = orgResult.rows[0].id;
+    }
+
+    // Hash the password
     const passwordHash = await authUtils.hashPassword(password);
-  
-    // If role, score, or organization_id are undefined, we set defaults (like score = 0)
+
+    // Now insert the user with the fetched or newly created organization_id
     const query = `
-      INSERT INTO users (name, password, email, role, score, organization_id )
-      VALUES (?, ?, ?, ?, ?, ?)
-      RETURNING *
+      INSERT INTO users (name, password, email, role, score, organization_id)
+      VALUES (?, ?, ?, ?, ?, ?) RETURNING *
     `;
-  
-    const result = await knex.raw(query, [username, passwordHash, email, role, score, organization_id]);
+    console.log('Values:', { name, passwordHash, email, role, score, organization_id });
+
+    const result = await knex.raw(query, [name, passwordHash, email, role, score || 0, organization_id]);
     const rawUserData = result.rows[0];
+
     return new User(rawUserData);
   }
-  
 
-  // Updates the user that matches the given id with a new username.
-  // Returns the modified user, using the constructor to hide the passwordHash. 
-  static async update(id, username) {
+  // Updates the user that matches the given id with a new name.
+  // Returns the modified user, using the constructor to hide the passwordHash.
+  static async update(id, name) {
     const query = `
       UPDATE users
-      SET username=?
+      SET name=?
       WHERE id=?
       RETURNING *
-    `
-    const result = await knex.raw(query, [username, id])
+    `;
+    const result = await knex.raw(query, [name, id]);
     const rawUpdatedUser = result.rows[0];
     return rawUpdatedUser ? new User(rawUpdatedUser) : null;
   };
 
+  // Fetches users by organization ID
+  static async findByOrganizationId(organizationId) {
+    const query = `SELECT * FROM users WHERE organization_id = ?`;
+    const result = await knex.raw(query, [organizationId]);
+    return result.rows.map(rawUserData => new User(rawUserData));
+  }
+
+  // Deletes a user by ID
   static async deleteById(id) {
     return knex('users').where({ id }).del();
   }
-  
 
+  // Deletes all users
   static async deleteAll() {
-    return knex('users').del()
+    return knex('users').del();
   }
 }
 

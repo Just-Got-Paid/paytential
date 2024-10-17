@@ -8,7 +8,6 @@ exports.loginUser = async (req, res) => {
   const { name, password } = req.body // the req.body value is provided by the client
 
   const user = await User.findByUsername(name);
-  console.log(user);
   if (!user) return res.sendStatus(404);
 
   const isPasswordValid = await user.isValidPassword(password);
@@ -33,3 +32,5 @@ exports.showMe = async (req, res) => {
   const user = await User.find(req.session.userId);
   res.send(user);
 };
+
+
