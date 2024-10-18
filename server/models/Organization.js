@@ -7,27 +7,32 @@ class Organization {
     this.id = id;
     this.name = name;
   }
-  static async removeStudentFromOrganization(organization_id, student_id) {
+  static async removeStudentFromOrganization(organization_id, user_id) {
     try {
-      const student = await knex('users')
-        .where({ id: student_id, organization_id: organization_id, role: 'student' })
-        .first();
-      if (!student) throw new Error('Student not found in this organization');
+      const user = await knex('users').where({
+        id: user_id,
+        organization_id: organization_id,
+        role: 'student',
+      }).first();
+  
+      if (!user) throw new Error('User not found or not a student in this organization');
       
-      await knex('users').where({ id: student_id }).del();
-      return student;
+      await knex('users').where({ id: user_id }).del();
+      return user;
     } catch (error) {
-      throw new Error('Error removing student from organization: ' + error.message);
+      throw new Error('Error removing user from organization: ' + error.message);
     }
   }
-  static async getStudentsByOrganization(organization_id) {
+  
+  static async getStudentsByOrganization(organization_id, role = 'student') {
     try {
-      const students = await knex('users').where({ organization_id: organization_id, role: 'student' });
-      return students;
+      const users = await knex('users').where({ organization_id: organization_id, role });
+      return users;
     } catch (error) {
-      throw new Error('Error fetching students from organization: ' + error.message);
+      throw new Error('Error fetching users from organization: ' + error.message);
     }
   }
+  
 }
 
 module.exports = Organization;
