@@ -9,7 +9,7 @@ class User {
   // static methods to hide the hashed password of users before sending user data 
   // to the client. Since we want to keep the #passwordHash property private, we 
   // provide the isValidPassword instance method as a way to indirectly access it.
-  constructor({ id, name, password, email, role, score, organization_id }) {
+  constructor({ id, name, password, email, role, score = 0, organization_id }) {
     this.id = id;
     this.name = name; // Updated from "username" to "name" to match your DB
     this.#passwordHash = password;
@@ -52,6 +52,13 @@ class User {
     const result = await knex.raw(query, [name]);
     const rawUserData = result.rows[0];
     return rawUserData ? new User(rawUserData) : null;
+    // try {
+    //   const rawUserData = await knex('users').whereRaw('LOWER(name) = LOWER(?)', [username]).first();
+    //   return rawUserData ? new User(rawUserData) : null;
+    // } catch (error) {
+    //   console.error('Database query error:', error);
+    //   throw error; // handle the error as needed
+    // }
   }
 
   // Hashes the given password and then creates a new user
@@ -84,7 +91,7 @@ class User {
       // If the organization exists, use its ID
       organization_id = orgResult.rows[0].id;
     }
-
+    console.log(organization_id);
     // Hash the password
     const passwordHash = await authUtils.hashPassword(password);
 

@@ -24,7 +24,8 @@ export default function LoginPage() {
     navigate(`/users/${user.id}`);
   };
 
-  return <>
+  return (
+  <>
     <h1>Login</h1>
     <form onSubmit={handleSubmit} aria-labelledby="login-heading">
       <h2 id='login-heading'>Log back in!</h2>
@@ -37,5 +38,6 @@ export default function LoginPage() {
       <button>Log in!</button>
     </form>
     {!!errorText && <p>{errorText}</p>}
-  </>;
+  </>
+  )
 }

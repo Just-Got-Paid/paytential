@@ -1,10 +1,12 @@
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
+  text-align: center;
 }
 
 input, label {
   display: block;
+  margin: 0 auto; /* Center the elements */
 }
 
 input {
