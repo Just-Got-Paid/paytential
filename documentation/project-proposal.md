@@ -1,13 +1,11 @@
 ### 🏙️ Mission Statement
-Clearly state the purpose and objectives of the project in a straightforward manner. Avoid unnecessary jargon or technical language that might confuse readers.
-* Keep it concise (1-3 sentences)
 
-*Example:* At Prints For A Purpose, our mission is to connect individuals in need of assistive devices with a compassionate global community of skilled builders. Using 3D printing technology, we can create affordable solutions that enhance independence and transform lives.
+At Paytential, our mission is to empower individuals to master personal finance through engaging interactive simulations. By combining gamification, education, and digital technology adaptation, we create innovative learning experiences that make financial education accessible and enjoyable, helping users build essential skills for a secure financial future.
 ___
 
 ### 🚀 Problem Statement
 
-Those who are first-generation, low-income and/or BIPOC face the unique challenges of attaining financial literacy, which is essential for their personal and professional success. These individuals often lack the critical financial education and resources that provides a financial foundation of budgeting, saving, investing, and credit management. Along with systemic inequities in education, limited financial conversations in the household exacerbate this knowledge gap opposed to those in agent groups who has been systematically advantaged by society and have the privilege of passing wealth and financial knowledge. As a result, the cycle of poverty persists as without financial literacy, individuals are not able to make informed financial decisions that promotes long-term economic mobility and building generational wealth. 
+Those who are first-generation, low-income and/or BIPOC face the unique challenges of attaining financial literacy, which is essential for their personal and professional success. These individuals often lack the critical financial education and resources that provide a financial foundation for budgeting, saving, investing, and credit management. Along with systemic inequities in education, limited financial conversations in the household exacerbate this knowledge gap as opposed to those in agent groups who have been systematically advantaged by society and have the privilege of passing wealth and financial knowledge. As a result, the cycle of poverty persists as without financial literacy, individuals are not able to make informed financial decisions that promote long-term economic mobility and build generational wealth. 
 
 ___
 
