@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Assuming you're using React Router
+import { useNavigate } from "react-router-dom";
+import { fetchHandler } from "../utils/fetchingUtils";
 
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(false); // Toggles between login and sign-up
@@ -11,7 +12,7 @@ const AuthPage = () => {
     password: "",
   });
 
-  const navigate = useNavigate(); // To handle navigation after login/sign-up
+  const navigate = useNavigate();
 
   // Handle form data change
   const handleChange = (e) => {
@@ -22,10 +23,28 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted with data:", formData);
-    // Perform login/signup logic here
 
-    // For demo purposes, navigate to home after submission
-    navigate("/");
+    try {
+      
+      const response = await fetchHandler("/api/users/authenticate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        const userId = userData.id; 
+        
+        
+        navigate(`/users/${userId}`);
+      } else {
+        console.error("Authentication failed:", response.statusText);
+  
+      }
+    } catch (error) {
+      console.error("Error occurred during authentication:", error);
+    }
   };
 
   // Toggle between login and sign-up
@@ -50,7 +69,6 @@ const AuthPage = () => {
           : "Educator Log In"}
       </h1>
       <form onSubmit={handleSubmit}>
-        {/* Always show Organization field for both student and educator */}
         <div>
           <label>Organization</label>
           <input
@@ -59,7 +77,7 @@ const AuthPage = () => {
             value={formData.organization}
             onChange={handleChange}
             placeholder="Organization"
-            required={isSignUp} // Only required during sign-up
+            required={isSignUp}
           />
         </div>
 
@@ -130,3 +148,4 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+

@@ -11,7 +11,7 @@ class User {
   // provide the isValidPassword instance method as a way to indirectly access it.
   constructor({ id, name, password, email, role, score = 0, organization_id }) {
     this.id = id;
-    this.name = name; // Updated from "username" to "name" to match your DB
+    this.name = name; 
     this.#passwordHash = password;
     this.email = email;
     this.role = role;
@@ -64,10 +64,10 @@ class User {
   // Hashes the given password and then creates a new user
   // in the users table. Returns the newly created user, using
   // the constructor to hide the passwordHash.
-  static async create(name, password, email, role, score, organizationName) {
+  static async create(name, password, email, role, score, organization_name) {
     // First, check if the organization exists
     let orgQuery = `SELECT id FROM organizations WHERE name = ?`;
-    let orgResult = await knex.raw(orgQuery, [organizationName]);
+    let orgResult = await knex.raw(orgQuery, [organization_name]);
 
     let organization_id;
 
@@ -75,13 +75,13 @@ class User {
       try {
         // If the organization doesn't exist, insert it
         const insertOrgQuery = `INSERT INTO organizations (name) VALUES (?) RETURNING id`;
-        const newOrgResult = await knex.raw(insertOrgQuery, [organizationName]);
+        const newOrgResult = await knex.raw(insertOrgQuery, [organization_name]);
         organization_id = newOrgResult.rows[0].id;  // Get the newly created organization ID
       } catch (error) {
         // Handle any error with the insertion, like a race condition where the organization
         // was inserted between the select and insert statements
         if (error.code === '23505') {  // Unique violation error code
-          const existingOrg = await knex.raw(orgQuery, [organizationName]);
+          const existingOrg = await knex.raw(orgQuery, [organization_name]);
           organization_id = existingOrg.rows[0].id;  // Get the existing organization ID
         } else {
           throw error;  // Re-throw other errors
@@ -123,9 +123,9 @@ class User {
   };
 
   // Fetches users by organization ID
-  static async findByOrganizationId(organizationId) {
+  static async findByOrganizationId(organization_id) {
     const query = `SELECT * FROM users WHERE organization_id = ?`;
-    const result = await knex.raw(query, [organizationId]);
+    const result = await knex.raw(query, [organization_id]);
     return result.rows.map(rawUserData => new User(rawUserData));
   }
 

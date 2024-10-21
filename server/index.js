@@ -51,7 +51,7 @@ app.post('/api/users', userControllers.createUser);
 
 // Protected user routes (requires authentication)
 app.get('/api/users', checkAuthentication, authorizeRole('admin'), userControllers.listUsers);
-app.get('/api/users/:id', checkAuthentication, authorizeRole('student'), userControllers.listUsers);
+//app.get('/api/users/:id', checkAuthentication, authorizeRole('student'), userControllers.listUsers);
 app.patch('/api/users/:id', checkAuthentication, userControllers.updateUser);
 
 
