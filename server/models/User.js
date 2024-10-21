@@ -39,11 +39,15 @@ class User {
   // the given user id. If it finds a user, uses the constructor
   // to format the user and returns or returns null if not.
   static async find(id) {
-    const query = `SELECT * FROM users WHERE id = ?`;
-    const result = await knex.raw(query, [id]);
-    const rawUserData = result.rows[0];
-    return rawUserData ? new User(rawUserData) : null;
+    try {
+      const result = await knex('users').where({ id }).first();  // Use Knex query builder
+      return result ? new User(result) : null;  // Return a new User instance if found
+    } catch (error) {
+      console.error('Error fetching user:', error);  // Log the error for debugging
+      throw new Error('Database query failed');
+    }
   }
+  
 
   // Same as above but uses the name to find the user
   static async findByUsername(name) {

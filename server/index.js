@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 ///////////////////////////////
 
 // Auth routes (login, logout, check current session)
-app.get('/api/me', authControllers.showMe);
+app.get('/api/users/:id', userControllers.showUser);
 app.post('/api/login', authControllers.loginUser);
 app.delete('/api/logout', authControllers.logoutUser);
 
