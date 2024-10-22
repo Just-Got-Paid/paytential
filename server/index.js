@@ -102,7 +102,7 @@ app.delete(
 
 // Get all users in a specific organization (requires authentication)
 app.get(
-	"/api/organizations/:organizationId/users",
+	"/api/organizations/:organization_id/users",
 	checkAuthentication,
 	authorizeRole("admin"),
 	getUsersByOrganization

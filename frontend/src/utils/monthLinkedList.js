@@ -1,4 +1,3 @@
-// /src/utils/MonthLinkedList.js
 
 class DayNode {
 	constructor(day) {
@@ -22,18 +21,18 @@ class MonthLinkedList {
 	// Function to get the number of days in the given month
 	getDaysInMonth(month, year) {
 		const daysPerMonth = {
-			1: 31,
-			2: this.isLeapYear(year) ? 29 : 28,
-			3: 31,
-			4: 30,
-			5: 31,
-			6: 30,
-			7: 31,
-			8: 31,
-			9: 30,
-			10: 31,
-			11: 30,
-			12: 31,
+			"january": 31,
+			"february": this.isLeapYear(year) ? 29 : 28,
+			"march": 31,
+			"april": 30,
+			"may": 31,
+			"june": 30,
+			"july": 31,
+			"august": 31,
+			"september": 30,
+			"october": 31,
+			"november": 30,
+			"december": 31,
 		};
 		return daysPerMonth[month];
 	}

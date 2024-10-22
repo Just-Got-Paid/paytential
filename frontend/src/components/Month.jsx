@@ -1,75 +1,110 @@
 import React, { useState, useEffect } from 'react';
-import MonthLinkedList  from '../utils/monthLinkedList'; // Assuming the utility is in utils
+import MonthLinkedList from '../utils/monthLinkedList';
+import '../styles/Month.css';
 
 const Month = () => {
-  const [month, setMonth] = useState(1); // Default to January
+  const monthNames = {
+    1: "january",
+    2: "february",
+    3: "march",
+    4: "april",
+    5: "may",
+    6: "june",
+    7: "july",
+    8: "august",
+    9: "september",
+    10: "october",
+    11: "november",
+    12: "december"
+  };
+
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(1); // Start from January (1st month)
   const [year, setYear] = useState(2024); // Default to the current year
   const [days, setDays] = useState([]);
+  const [monthCount, setMonthCount] = useState(1); // Keep track of the number of months in the simulation
+
+  // Utility to get the day of the week the 1st of the month falls on
+  const getFirstDayOfMonth = (month, year) => {
+    return new Date(year, month - 1, 1).getDay(); // 0 (Sunday) to 6 (Saturday)
+  };
 
   // Function to handle when the month or year changes
-  const generateCalendar = () => {
+  const generateCalendar = (monthIndex) => {
+    const month = monthNames[monthIndex];
     const linkedList = new MonthLinkedList(month, year);
     linkedList.createMonthList();
 
-    // Traverse the linked list to extract the days
     const allDays = [];
     let current = linkedList.head;
     while (current !== null) {
       allDays.push(current.day);
       current = current.next;
     }
-    setDays(allDays);
+
+    // Get the first day of the month (0 = Sunday, 6 = Saturday)
+    const firstDayIndex = getFirstDayOfMonth(monthIndex, year);
+
+    // Add empty days for the previous month (if the month doesn't start on Sunday)
+    const paddedDays = Array(firstDayIndex).fill(null).concat(allDays);
+
+    setDays(paddedDays);
   };
 
   useEffect(() => {
-    // Generate the calendar for the initial load or when month/year changes
-    generateCalendar();
-  }, [month, year]);
+    generateCalendar(currentMonthIndex);
+  }, [currentMonthIndex, year]);
+
+  const handleNextMonth = () => {
+    if (monthCount < 3) {
+      const nextMonthIndex = currentMonthIndex === 12 ? 1 : currentMonthIndex + 1;
+      setCurrentMonthIndex(nextMonthIndex);
+      setMonthCount(monthCount + 1);
+    } else {
+      alert("The simulation is over!");
+    }
+  };
 
   return (
-    <div>
-      <h3>Calendar for {month}/{year}</h3>
+    <div className="calendar-container">
+      <h3>Simulation for {monthNames[currentMonthIndex].charAt(0).toUpperCase() + monthNames[currentMonthIndex].slice(1)}/{year}</h3>
 
-      <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="month">Select Month: </label>
-        <select
-          id="month"
-          value={month}
-          onChange={(e) => setMonth(Number(e.target.value))}
-        >
-          <option value={1}>January</option>
-          <option value={2}>February</option>
-          <option value={3}>March</option>
-          <option value={4}>April</option>
-          <option value={5}>May</option>
-          <option value={6}>June</option>
-          <option value={7}>July</option>
-          <option value={8}>August</option>
-          <option value={9}>September</option>
-          <option value={10}>October</option>
-          <option value={11}>November</option>
-          <option value={12}>December</option>
-        </select>
+      <form>
+        <div>
+          <label htmlFor="year">Select Year: </label>
+          <input
+            id="year"
+            type="number"
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            min={1900}
+            max={2100}
+          />
+        </div>
+      </form>
 
-        <label htmlFor="year" style={{ marginLeft: '20px' }}>Select Year: </label>
-        <input
-          id="year"
-          type="number"
-          value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-          min={1900}
-          max={2100}
-          style={{ marginLeft: '10px' }}
-        />
+      {/* Render the calendar as a grid */}
+      <div className="calendar-grid">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayName, index) => (
+          <div key={index} className="calendar-day">{dayName}</div>
+        ))}
+        {days.map((day, index) =>
+          day ? (
+            <div key={index} className="calendar-day">Day {day}</div>
+          ) : (
+            <div key={index} className="empty-day"></div>
+          )
+        )}
       </div>
 
-      <ul>
-        {days.map((day, index) => (
-          <li key={index}>Day {day}</li>
-        ))}
-      </ul>
+      <button onClick={handleNextMonth} disabled={monthCount >= 3}>
+        {monthCount < 3 ? "Next Month" : "End Simulation"}
+      </button>
+
+      {monthCount >= 3 && (
+        <div className="simulation-ended">Simulation Ended</div>
+      )}
     </div>
   );
 };
 
-export default Month
+export default Month;
