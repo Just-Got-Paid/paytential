@@ -9,6 +9,7 @@ export default function BudgetSelectionPage() {
   const [savings, setSavings] = useState(0);
   const [wants, setWants] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  
 
   const navigate = useNavigate()
 

@@ -27,20 +27,19 @@ const AuthPage = () => {
 
     try {
       
-      const response = await fetchHandler("/api/login", {
+      const [data, error] = await fetchHandler("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const userData = await response.json();
-        const userId = userData.id; 
+      if (data) {
+        const userId = data.id; 
         
         
         navigate(`/users/${userId}`);
       } else {
-        console.error("Authentication failed:", response.statusText);
+        console.error("Authentication failed:", error);
   
       }
     } catch (error) {

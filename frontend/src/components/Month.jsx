@@ -3,6 +3,8 @@ import MonthLinkedList from '../utils/monthLinkedList';
 import '../styles/Month.css';
 
 const Month = () => {
+  const [budget, setBudget] = useState(null); // Store the selected budget
+
   const monthNames = {
     1: "january",
     2: "february",
@@ -68,6 +70,16 @@ const Month = () => {
     <div className="calendar-container">
       <h3>Simulation for {monthNames[currentMonthIndex].charAt(0).toUpperCase() + monthNames[currentMonthIndex].slice(1)}/{year}</h3>
 
+      {/* Render the selected budget */}
+      {budget && (
+        <div className="budget-info">
+          <p><strong>Income:</strong> ${budget.income}</p>
+          <p><strong>Needs:</strong> ${budget.needs}</p>
+          <p><strong>Savings:</strong> ${budget.savings}</p>
+          <p><strong>Wants:</strong> ${budget.wants}</p>
+        </div>
+      )}
+
       <form>
         <div>
           <label htmlFor="year">Select Year: </label>
@@ -108,3 +120,4 @@ const Month = () => {
 };
 
 export default Month;
+
