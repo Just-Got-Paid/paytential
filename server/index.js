@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 ///////////////////////////////
 
 // Auth routes (login, logout, check current session)
-app.get('/api/me', authControllers.showMe);
+app.get('/api/users/:id', userControllers.showUser);
 app.post('/api/login', authControllers.loginUser);
 app.delete('/api/logout', authControllers.logoutUser);
 
@@ -51,7 +51,7 @@ app.post('/api/users', userControllers.createUser);
 
 // Protected user routes (requires authentication)
 app.get('/api/users', checkAuthentication, authorizeRole('admin'), userControllers.listUsers);
-app.get('/api/users/:id', checkAuthentication, authorizeRole('student'), userControllers.listUsers);
+//app.get('/api/users/:id', checkAuthentication, authorizeRole('student'), userControllers.listUsers);
 app.patch('/api/users/:id', checkAuthentication, userControllers.updateUser);
 
 

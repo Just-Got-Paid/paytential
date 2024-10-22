@@ -1,5 +1,4 @@
 const knex = require('../db/knex');
-const authUtils = require('../utils/auth-utils');
 
 class Budget {
   constructor({ id, simulation_id, savings, needs, wants }) {
