@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function BudgetSelectionPage() {
   const [income, setIncome] = useState(30000); // Default income
+  const [taxes, setTaxes] = useState(5836)
   const [needs, setNeeds] = useState(0);
   const [savings, setSavings] = useState(0);
   const [wants, setWants] = useState(0);
@@ -15,11 +16,11 @@ export default function BudgetSelectionPage() {
 
   // Function to calculate the budget
   const calculateBudget = (selectedIncome) => {
-    const needsBudget = selectedIncome * 0.3; // 30% goes to needs
-    const remainingBudget = selectedIncome * 0.7; // 70% left for savings and wants
+    const netIncome = selectedIncome - taxes // gross income - taxes to get net income
+    const needsBudget = netIncome * 0.5; // 50% goes to needs
+    const wantsBudget = netIncome * 0.3; // 30% goes to wants
+    const savingsBudget = netIncome *0.2; // 20% goes to savings
 
-    const savingsBudget = remainingBudget * 0.5; // Divide remaining equally
-    const wantsBudget = remainingBudget * 0.5;
 
     setNeeds(needsBudget);
     setSavings(savingsBudget);
@@ -30,6 +31,10 @@ export default function BudgetSelectionPage() {
   const handleIncomeChange = (e) => {
     const selectedIncome = parseInt(e.target.value, 10);
     setIncome(selectedIncome);
+    if (selectedIncome === 30000) setTaxes(5836)
+    if (selectedIncome === 70000) setTaxes(18618)
+    if (selectedIncome === 10000) setTaxes(30381)
+    if (selectedIncome === 20000) setTaxes(69578)
     calculateBudget(selectedIncome);
   };
 
@@ -76,9 +81,11 @@ export default function BudgetSelectionPage() {
           {/* Budget Display */}
           <div className="budget-breakdown">
             <h3>Your Budget Breakdown</h3>
+            <p>Taxes: ${taxes.toLocaleString()}</p>
             <p>Needs: ${needs.toLocaleString()}</p>
-            <p>Savings: ${savings.toLocaleString()}</p>
             <p>Wants: ${wants.toLocaleString()}</p>
+            <p>Savings: ${savings.toLocaleString()}</p>
+            <p>Total: ${taxes + needs + savings + wants}</p>
           </div>
 
           {/* Submit Button */}
