@@ -9,6 +9,8 @@ import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
 import AuthPage from './pages/AuthPage';
+import AdminPage from './pages/AdminPage'
+import Month from './components/Month'
 
 export default function App() {
   const { setCurrentUser } = useContext(UserContext);
@@ -21,12 +23,13 @@ export default function App() {
     <main>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sign-up' element={<AuthPage />} />
         <Route path='/login' element={<AuthPage />} />
         <Route path='/sign-up' element={<AuthPage />} />
         <Route path='/users' element={<UsersPage />} />
         <Route path='/users/:id' element={<UserPage />} />
         <Route path='/rules' element={<BudgetSelectionPage />} />
+        <Route path='/admin' element ={<AdminPage />} />
+        <Route path='/month' element={<Month />}/> 
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </main>

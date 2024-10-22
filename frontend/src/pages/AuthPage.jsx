@@ -12,6 +12,7 @@ const AuthPage = () => {
     password: "",
   });
 
+ 
   const navigate = useNavigate();
 
   // Handle form data change
@@ -126,22 +127,31 @@ const AuthPage = () => {
         {isStudent ? (
           <p>
             Not a student?{" "}
-            <a onClick={toggleRole}>Educator {isSignUp ? "Sign Up" : "Log In"}</a>
+            <a onClick={toggleRole} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>Educator {isSignUp ? "Sign Up" : "Log In"}</a>
           </p>
         ) : (
           <p>
             Not an educator?{" "}
-            <a onClick={toggleRole}>Student {isSignUp ? "Sign Up" : "Log In"}</a>
+            <a onClick={toggleRole } style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>Student {isSignUp ? "Sign Up" : "Log In"}</a>
           </p>
         )}
-
-        <p>
-          {isSignUp ? (
-            <a onClick={toggleSignUp}>Already have an account? Log In</a>
-          ) : (
-            <a onClick={toggleSignUp}>Don't have an account? Sign Up</a>
-          )}
-        </p>
+          <p>
+            {isSignUp ? (
+              <>
+                Already have an account?{" "}
+                <a onClick={toggleSignUp} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+                  Log In
+                </a>
+              </>
+            ) : (
+              <>
+                Don't have an account?{" "}
+                <a onClick={toggleSignUp} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+                  Sign Up
+                </a>
+              </>
+            )}
+          </p>
       </div>
     </div>
   );
