@@ -12,7 +12,6 @@ const AuthPage = () => {
     password: "",
   });
 
- 
   const navigate = useNavigate();
 
   // Handle form data change
@@ -26,8 +25,8 @@ const AuthPage = () => {
     console.log("Form submitted with data:", formData);
 
     try {
-      
-      const [data, error] = await fetchHandler("/api/login", {
+      const url = isSignUp ? "/api/sign-up" : "/api/login"; // Adjust URL based on sign-up or login
+      const [data, error] = await fetchHandler(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -35,12 +34,9 @@ const AuthPage = () => {
 
       if (data) {
         const userId = data.id; 
-        
-        
         navigate(`/users/${userId}`);
       } else {
         console.error("Authentication failed:", error);
-  
       }
     } catch (error) {
       console.error("Error occurred during authentication:", error);
@@ -69,29 +65,33 @@ const AuthPage = () => {
           : "Educator Log In"}
       </h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Organization</label>
-          <input
-            type="text"
-            name="organization"
-            value={formData.organization}
-            onChange={handleChange}
-            placeholder="Organization"
-            required={isSignUp}
-          />
-        </div>
-
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-            required
-          />
-        </div>
+        {/* Show Organization and Email fields only during sign-up */}
+        {isSignUp && (
+          <>
+            <div>
+              <label>Organization</label>
+              <input
+                type="text"
+                name="organization"
+                value={formData.organization}
+                onChange={handleChange}
+                placeholder="Organization"
+                required
+              />
+            </div>
+            <div>
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                required
+              />
+            </div>
+          </>
+        )}
 
         <div>
           <label>Username</label>
@@ -122,35 +122,26 @@ const AuthPage = () => {
         </button>
       </form>
 
+      {/* Links for toggling between Student and Educator, and Sign Up vs Log In */}
       <div className="switch">
-        {isStudent ? (
-          <p>
-            Not a student?{" "}
-            <a onClick={toggleRole} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>Educator {isSignUp ? "Sign Up" : "Log In"}</a>
-          </p>
-        ) : (
-          <p>
-            Not an educator?{" "}
-            <a onClick={toggleRole } style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>Student {isSignUp ? "Sign Up" : "Log In"}</a>
-          </p>
-        )}
-          <p>
-            {isSignUp ? (
-              <>
-                Already have an account?{" "}
-                <a onClick={toggleSignUp} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
-                  Log In
-                </a>
-              </>
-            ) : (
-              <>
-                Don't have an account?{" "}
-                <a onClick={toggleSignUp} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
-                  Sign Up
-                </a>
-              </>
-            )}
-          </p>
+        <p>
+          {isStudent ? `Not a student?` : `Not an educator?`}{" "}
+          <a
+            onClick={toggleRole}
+            style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            Switch to {isStudent ? "Educator" : "Student"}
+          </a>
+        </p>
+        <p>
+          {isSignUp ? `Already have an account?` : `Don't have an account?`}{" "}
+          <a
+            onClick={toggleSignUp}
+            style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            {isSignUp ? "Log In" : "Sign Up"}
+          </a>
+        </p>
       </div>
     </div>
   );
