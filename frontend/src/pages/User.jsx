@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CurrentUserContext from "../contexts/current-user-context";
 import { getUser } from "../adapters/user-adapter";
-import { getUsersByOrganization } from "../adapters/organization-adapter"
+import { getUsersByOrganization } from "../adapters/organization-adapter";
 import { logUserOut } from "../adapters/auth-adapter";
 import UpdateUsernameForm from "../components/UpdateUsernameForm";
 
@@ -15,9 +15,16 @@ export default function UserPage() {
   const { id } = useParams();
   const isCurrentUserProfile = currentUser && currentUser.id === Number(id);
 
+  // Redirect to admin page if current user is admin
+  useEffect(() => {
+    if (currentUser && currentUser.role === 'admin') {
+      navigate('/admin'); // Redirect to the admin page if the user is an admin
+    }
+  }, [currentUser, navigate]);
+
   // Load user profile
   useEffect(() => {
-    console.log('User ID:', id)
+    console.log('User ID:', id);
     const loadUser = async () => {
       const [user, error] = await getUser(id);
       if (error) return setErrorText(error.message);
@@ -51,32 +58,34 @@ export default function UserPage() {
 
   const profileUsername = isCurrentUserProfile ? currentUser.name : userProfile.name;
 
-  return <>
-    <h1>{`${profileUsername}`}</h1>
-    {!!isCurrentUserProfile && <button onClick={handleLogout}>Log Out</button>}
-    <p>If the user had any data, here it would be</p>
-    <p>Fake Bio or something</p>
+  return (
+    <>
+      <h1>{`${profileUsername}`}</h1>
+      {!!isCurrentUserProfile && <button onClick={handleLogout}>Log Out</button>}
+      <p>If the user had any data, here it would be</p>
+      <p>Fake Bio or something</p>
 
-    {/* Render the UpdateUsernameForm for the current user */}
-    {
-      !!isCurrentUserProfile
-      && <UpdateUsernameForm currentUser={currentUser} setCurrentUser={setCurrentUser} />
-    }
+      {/* Render the UpdateUsernameForm for the current user */}
+      {
+        !!isCurrentUserProfile &&
+        <UpdateUsernameForm currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      }
 
-    {/* If the current user is an admin, show the organization users */}
-    {
-      currentUser && currentUser.role === 'admin' && (
-        <>
-          <h2>Users in Your Organization</h2>
-          <ul>
-            {organizationUsers.map(user => (
-              <li key={user.id}>
-                {user.name} - {user.email} - {user.role}
-              </li>
-            ))}
-          </ul>
-        </>
-      )
-    }
-  </>;
+      {/* If the current user is an admin, show the organization users */}
+      {
+        currentUser && currentUser.role === 'admin' && (
+          <>
+            <h2>Users in Your Organization</h2>
+            <ul>
+              {organizationUsers.map(user => (
+                <li key={user.id}>
+                  {user.name} - {user.email} - {user.role}
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </>
+  );
 }
