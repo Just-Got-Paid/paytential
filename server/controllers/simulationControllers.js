@@ -59,9 +59,10 @@ exports.updateSimulation = async (req, res) => {
 };
 
 exports.deleteSimulation = async (req, res) => {
+  const  {id}  = req.params;
+
+  const simulation = await Simulation.findById(id);
   try {
-    const { id } = req.params;
-    const simulation = await Simulation.findById(id);
 
     // Only allow the user to delete their own simulation(avatar)
     if (simulation && simulation.user_id === req.session.userId) {

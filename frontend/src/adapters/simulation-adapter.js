@@ -29,7 +29,10 @@ export const updateSimulation = async ({ current_month, year_complete, total_net
 
 // Delete a simulation by its ID
 export const deleteSimulation = async (id) => {
-  const [response, error] = await fetchHandler(`${baseUrl}/${id}`, deleteOptions());
+  const [response, error] = await fetchHandler(`${baseUrl}/${id}`, deleteOptions);
   if (error) console.log(error);
-  return response;
+  return response
+  // if (response) {
+  //   return true; // Successfully deleted
+  // }
 };

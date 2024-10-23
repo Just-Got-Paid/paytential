@@ -63,9 +63,9 @@ app.patch('/api/users/:id', checkAuthentication, userControllers.updateUser);
 // Simulations(avatar) creation, fetching, updating, and deleting (all require authentication)
 app.post('/api/simulations', checkAuthentication, simulationControllers.createSimulation);
 app.get('/api/simulations', checkAuthentication, simulationControllers.getSimulationsByUser);
-app.get('/api/simulations/:id/:simulation_id', checkAuthentication, simulationControllers.getSimulationById);
-app.patch('/api/simulations/:simulation_id', checkAuthentication, simulationControllers.updateSimulation);
-app.delete('/api/simulations/:simulation_id', checkAuthentication, simulationControllers.deleteSimulation);
+app.get('/api/simulations/:id', checkAuthentication, simulationControllers.getSimulationById);
+app.patch('/api/simulations/:id', checkAuthentication, simulationControllers.updateSimulation);
+app.delete('/api/simulations/:id', checkAuthentication, simulationControllers.deleteSimulation);
 
 
 ///////////////////////////////

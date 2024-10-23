@@ -18,7 +18,7 @@ export default function SimulationPage() {
         console.log("User not logged in."); 
         return; // Exit if no user is logged in
       }
-      console.log(currentUser.id); 
+      // console.log(currentUser.id); 
       const userSimulations = await getAllSimulations(); 
       setSimulations(userSimulations);
     };
@@ -38,18 +38,19 @@ export default function SimulationPage() {
     }
 
     try {
-      const currentMonth = new Date().getMonth() + 1; // Get current month as a number (1-12)
+      //const currentMonth = 0 //new Date().getMonth() + 1; // Get current month as a number (1-12)
       const yearComplete = false;
 
       await createSimulation({
         user_id: currentUser.id, 
-        current_month: currentMonth,
+        current_month: 0,
         year_complete: yearComplete,
         total_networth: 0,
       });
 
       // Re-fetch simulations after creating a new one
       const userSimulations = await getAllSimulations();
+      console.log("type?", userSimulations, userSimulations[0]?.current_month)
       setSimulations(userSimulations);
     } catch (error) {
       console.error("Error creating simulation:", error);
@@ -60,12 +61,9 @@ export default function SimulationPage() {
     console.log("Attempting to delete simulation with ID:", simulationId);
     try {
       const response = await deleteSimulation(simulationId);
-      if (!response) {
-        console.error("Failed to delete simulation: No response");
-      } else {
-        setSimulations(simulations.filter(sim => sim.id !== simulationId));
-        console.log("Simulation deleted successfully.");
-      }
+      console.log('try',response)
+      setSimulations(simulations.filter(sim => sim.id !== simulationId));
+      console.log("Simulation deleted successfully.");
     } catch (error) {
       console.error("Error deleting simulation:", error);
     }
@@ -110,13 +108,13 @@ export default function SimulationPage() {
           {simulations.map((simulation) => (
             <li key={simulation.id}>
               {simulation.year_complete ? (
-                <>Simulation for Month: {simulation.current_month}, Year Complete: Yes, Total Net Worth: ${simulation.total_networth.toLocaleString()}</>
+                <>Month: {`${simulation.current_month}`} | Cycle Completed?: Yes | Total Net Worth: ${simulation.total_networth.toLocaleString()}</>
               ) : (
                 <Link 
                   to={`/avatar/${simulation.id}`} 
                   style={{ textDecoration: 'none', color: 'blue' }} 
                 >
-                  Simulation for Month: {simulation.current_month}, Year Complete: No, Total Net Worth: ${simulation.total_networth.toLocaleString()}
+                  Month: {`${simulation.current_month}`} | Cycle Completed?: No | Total Net Worth: ${simulation.total_networth.toLocaleString()}
                 </Link>
               )}
               <button onClick={() => handleDelete(simulation.id)}>Delete</button>

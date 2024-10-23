@@ -3,14 +3,7 @@ const knex = require('../db/knex');
 
 class Simulation {
   
-  constructor({ id, user_id, curr_month, year_complete, total_networth}) {
-    this.id = id;
-    this.user_id = user_id;
-    this.curr_month = curr_month;
-    this.year_complete = year_complete;
-    this.total_networth = total_networth;
-  }
-
+  
   // New simulation recorded
   static async create(user_id, current_month, year_complete, total_networth) {
     const query = `
@@ -19,7 +12,7 @@ class Simulation {
     `;
     const result = await knex.raw(query, [user_id, current_month, year_complete, total_networth]);
     const rawSimulationData = result.rows[0];
-    return new Simulation(rawSimulationData);
+    return rawSimulationData;
   }
 
   // Retrieves all simulations associated with a specific user ID
@@ -28,7 +21,8 @@ class Simulation {
       SELECT * FROM simulations WHERE user_id = ?
     `;
     const result = await knex.raw(query, [user_id]);
-    return result.rows.map((rawSimulationData) => new Simulation(rawSimulationData));
+    console.log(result.rows)
+    return result.rows
   }
 
   // Id here represents simulation_id
