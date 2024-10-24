@@ -15,11 +15,13 @@ const {
 } = require("./middleware/checkAuthentication");
 
 // Controller imports
-const authControllers = require("./controllers/authControllers");
-const userControllers = require("./controllers/userControllers");
-const budgetControllers = require("./controllers/budgetControllers");
-const { getUsersByOrganization } = require("./controllers/userControllers");
-const { deleteStudent } = require("./controllers/adminControllers");
+
+const authControllers = require('./controllers/authControllers');
+const userControllers = require('./controllers/userControllers');
+const budgetControllers = require('./controllers/budgetControllers');
+const simulationControllers = require('./controllers/simulationControllers')
+const { getUsersByOrganization } = require('./controllers/userControllers');
+
 
 const app = express();
 
@@ -74,6 +76,18 @@ app.get(
 	authorizeRole("admin"),
 	getUsersByOrganization
 );
+
+///////////////////////////////
+// Simulations Routes
+///////////////////////////////
+
+// Simulations(avatar) creation, fetching, updating, and deleting (all require authentication)
+app.post('/api/simulations', checkAuthentication, simulationControllers.createSimulation);
+app.get('/api/simulations', checkAuthentication, simulationControllers.getSimulationsByUser);
+app.get('/api/simulations/:id', checkAuthentication, simulationControllers.getSimulationById);
+app.patch('/api/simulations/:id', checkAuthentication, simulationControllers.updateSimulation);
+app.delete('/api/simulations/:id', checkAuthentication, simulationControllers.deleteSimulation);
+
 
 ///////////////////////////////
 // Budget Routes

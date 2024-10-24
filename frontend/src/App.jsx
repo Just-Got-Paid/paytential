@@ -8,9 +8,10 @@ import UserContext from './contexts/current-user-context';
 import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
-import AuthPage from './pages/AuthPage';
-import AdminPage from './pages/AdminPage';
-import Month from './components/Month';
+
+import SimulationsPage from './pages/Simulations'
+import AvatarPage from './pages/Avatar';
+
 
 export default function App() {
   const { setCurrentUser } = useContext(UserContext);
@@ -22,26 +23,21 @@ export default function App() {
     checkForLoggedInUser().then(setCurrentUser);
   }, [setCurrentUser]);
 
-  const toggleSignUp = () => setIsSignUp(!isSignUp);
-  const toggleRole = () => setIsStudent(!isStudent);
 
-  return (
-    <>
-      <SiteHeadingAndNav isSignUp={isSignUp} toggleSignUp={toggleSignUp} isStudent={isStudent} toggleRole={toggleRole} />
-      <main>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<AuthPage isSignUp={isSignUp} isStudent={isStudent} toggleSignUp={toggleSignUp} toggleRole={toggleRole} />} />
-          <Route path='/sign-up' element={<AuthPage isSignUp={isSignUp} isStudent={isStudent} toggleSignUp={toggleSignUp} toggleRole={toggleRole} />} />
-          <Route path='/users' element={<UsersPage />} />
-          <Route path='/users/:id' element={<UserPage />} />
-          <Route path='/rules' element={<BudgetSelectionPage />} />
-          <Route path='/admin' element={<AdminPage />} />
-          <Route path='/month' element={<Month />} /> 
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
-      </main>
-    </>
-  );
+  return <>
+    <SiteHeadingAndNav />
+    <main>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/sign-up' element={<SignUpPage />} />
+        <Route path='/users' element={<UsersPage />} />
+        <Route path='/users/:id' element={<UserPage />} />
+        <Route path='/simulation' element={<SimulationsPage />} />
+        <Route path='/avatar/:sim-id' element={<AvatarPage />} />
+        <Route path='*' element={<NotFoundPage />} />
+      </Routes>
+    </main>
+  </>;
 }
 
