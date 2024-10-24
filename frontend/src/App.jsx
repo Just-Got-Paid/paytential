@@ -1,22 +1,28 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import SignUpPage from './pages/SignUp';
-import LoginPage from './pages/Login';
+import BudgetSelectionPage from './pages/BudgetPage';
 import SiteHeadingAndNav from './components/SiteHeadingAndNav';
 import NotFoundPage from './pages/NotFound';
 import UserContext from './contexts/current-user-context';
 import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
+
 import SimulationsPage from './pages/Simulations'
 import AvatarPage from './pages/Avatar';
 
+
 export default function App() {
   const { setCurrentUser } = useContext(UserContext);
+  
+  const [isSignUp, setIsSignUp] = useState(false); // Lift state for sign-up
+  const [isStudent, setIsStudent] = useState(true); // Lift state for role
+
   useEffect(() => {
     checkForLoggedInUser().then(setCurrentUser);
   }, [setCurrentUser]);
+
 
   return <>
     <SiteHeadingAndNav />
@@ -34,3 +40,4 @@ export default function App() {
     </main>
   </>;
 }
+
