@@ -2,7 +2,9 @@ import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import CurrentUserContext from "../contexts/current-user-context";
 
-export default function SiteHeadingAndNav({ isSignUp, toggleSignUp, isStudent, toggleRole }) {
+
+//we dont need these props ({ isSignUp, toggleSignUp, isStudent, toggleRole }
+export default function SiteHeadingAndNav() {
   const { currentUser } = useContext(CurrentUserContext);
 
   return (
@@ -19,8 +21,9 @@ export default function SiteHeadingAndNav({ isSignUp, toggleSignUp, isStudent, t
             </>
           ) : (
             <>
-              <li><NavLink to={isSignUp ? "/sign-up" : "/login"} onClick={toggleSignUp}>{isSignUp ? "Login" : "Sign Up"}</NavLink></li>
-              <li><NavLink to={isSignUp ? "/sign-up" : "/login"} onClick={toggleRole}>{isStudent ? "Student" : "Educator"} {isSignUp ? "Sign Up" : "Login"}</NavLink></li>
+              
+              <li><NavLink to="/login">Login</NavLink></li>
+              <li><NavLink to="/sign-up">Sign Up</NavLink></li>
             </>
           )}
         </ul>

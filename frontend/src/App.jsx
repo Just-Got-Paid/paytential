@@ -8,7 +8,8 @@ import UserContext from './contexts/current-user-context';
 import { checkForLoggedInUser } from './adapters/auth-adapter';
 import UsersPage from './pages/Users';
 import UserPage from './pages/User';
-
+import LoginPage from './pages/Login';
+import SignUpPage from './pages/SignUp';
 import Simulations from './pages/Simulations'
 import AvatarPage from './pages/Avatar';
 

@@ -2,13 +2,14 @@ const { isAuthorized } = require("../utils/auth-utils");
 const User = require("../models/User");
 
 exports.createUser = async (req, res) => {
+	console.log(req.body);
 	try {
-		const { name, password, email, role, score, organization_id } = req.body;
+		const { name, password, email, role, organizationName } = req.body;
 
 		// Ensure organizationName is provided
-		if (!organization_id) {
-			return res.status(400).json({ error: "Organization name is required" });
-		}
+		// if (!organization_id) {  // this check is done in the front end via form validation
+		// 	return res.status(400).json({ error: "Organization name is required" });
+		// }
 
 		// Call the create method in User model
 		const newUser = await User.create(
@@ -16,8 +17,8 @@ exports.createUser = async (req, res) => {
 			password,
 			email,
 			role,
-			score,
-			organization_id
+			// score, form is missing this
+			organizationName
 		);
 		return res.status(201).json(newUser);
 	} catch (error) {

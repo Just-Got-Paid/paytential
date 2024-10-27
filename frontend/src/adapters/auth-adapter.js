@@ -1,18 +1,25 @@
-import { fetchHandler, getPostOptions, deleteOptions } from "../utils/fetchingUtils";
+import {
+	fetchHandler,
+	getPostOptions,
+	deleteOptions,
+} from "../utils/fetchingUtils";
 
-const baseUrl = '/api';
+const baseUrl = "/api";
 
 export const checkForLoggedInUser = async () => {
-  const [data] = await fetchHandler(`${baseUrl}/me`);
-  return data;
+	const [data] = await fetchHandler(`${baseUrl}/me`);
+	return data;
 };
 
-export const logUserIn = async ({ name, password }) => {
-  return fetchHandler(`${baseUrl}/login`, getPostOptions({ name, password }))
+export const logUserIn = async ({ username, password }) => {
+	return fetchHandler(
+		`${baseUrl}/login`,
+		getPostOptions({ username, password })
+	);
 };
 
 // the logout route pretty much can't fail with our setup, but if yours can, change this
 export const logUserOut = async () => {
-  await fetchHandler(`${baseUrl}/logout`, deleteOptions);
-  return true;
+	await fetchHandler(`${baseUrl}/logout`, deleteOptions);
+	return true;
 };

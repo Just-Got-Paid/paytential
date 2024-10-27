@@ -8,6 +8,7 @@ const express = require("express");
 
 // Middleware imports
 const handleCookieSessions = require("./middleware/handleCookieSessions");
+
 const logRoutes = require("./middleware/logRoutes");
 const {
 	checkAuthentication,
@@ -35,6 +36,7 @@ app.use(logRoutes); // Logs all incoming requests
 app.use(express.json()); // Parses incoming request bodies as JSON
 
 // Serve static assets (frontend)
+
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 ///////////////////////////////

@@ -1,4 +1,4 @@
-//const User = require('../models/User');
+// const User = require("../models/User");
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
@@ -30,6 +30,8 @@ exports.seed = async (knex) => {
 		.returning("id");
 
 	// Seed users
+	//
+
 	const users = await knex("users")
 		.insert([
 			{
@@ -58,6 +60,7 @@ exports.seed = async (knex) => {
 			},
 		])
 		.returning("id");
+	console.log(users);
 
 	// Seed simulations
 	const simulations = await knex("simulations")
