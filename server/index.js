@@ -8,6 +8,7 @@ const express = require("express");
 
 // Middleware imports
 const handleCookieSessions = require("./middleware/handleCookieSessions");
+
 const logRoutes = require("./middleware/logRoutes");
 const {
 	checkAuthentication,
@@ -16,12 +17,12 @@ const {
 
 // Controller imports
 
-const authControllers = require('./controllers/authControllers');
-const userControllers = require('./controllers/userControllers');
-const budgetControllers = require('./controllers/budgetControllers');
-const simulationControllers = require('./controllers/simulationControllers')
-const { getUsersByOrganization } = require('./controllers/userControllers');
-
+const authControllers = require("./controllers/authControllers");
+const userControllers = require("./controllers/userControllers");
+const budgetControllers = require("./controllers/budgetControllers");
+const simulationControllers = require("./controllers/simulationControllers");
+const { getUsersByOrganization } = require("./controllers/userControllers");
+const { deleteStudent } = require("./controllers/adminControllers");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(logRoutes); // Logs all incoming requests
 app.use(express.json()); // Parses incoming request bodies as JSON
 
 // Serve static assets (frontend)
+
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 ///////////////////////////////
@@ -42,7 +44,7 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 ///////////////////////////////
 
 // Auth routes (login, logout, check current session)
-app.get('/api/me', authControllers.showMe);
+app.get("/api/me", authControllers.showMe);
 app.get("/api/users/:id", userControllers.showUser);
 app.post("/api/login", authControllers.loginUser);
 app.delete("/api/logout", authControllers.logoutUser);
@@ -70,6 +72,7 @@ app.delete(
 	authorizeRole("admin"),
 	deleteStudent
 );
+
 app.get(
 	"/api/admin",
 	checkAuthentication,
@@ -82,12 +85,31 @@ app.get(
 ///////////////////////////////
 
 // Simulations(avatar) creation, fetching, updating, and deleting (all require authentication)
-app.post('/api/simulations', checkAuthentication, simulationControllers.createSimulation);
-app.get('/api/simulations', checkAuthentication, simulationControllers.getSimulationsByUser);
-app.get('/api/simulations/:id', checkAuthentication, simulationControllers.getSimulationById);
-app.patch('/api/simulations/:id', checkAuthentication, simulationControllers.updateSimulation);
-app.delete('/api/simulations/:id', checkAuthentication, simulationControllers.deleteSimulation);
-
+app.post(
+	"/api/simulations",
+	checkAuthentication,
+	simulationControllers.createSimulation
+);
+app.get(
+	"/api/simulations",
+	checkAuthentication,
+	simulationControllers.getSimulationsByUser
+);
+app.get(
+	"/api/simulations/:id",
+	checkAuthentication,
+	simulationControllers.getSimulationById
+);
+app.patch(
+	"/api/simulations/:id",
+	checkAuthentication,
+	simulationControllers.updateSimulation
+);
+app.delete(
+	"/api/simulations/:id",
+	checkAuthentication,
+	simulationControllers.deleteSimulation
+);
 
 ///////////////////////////////
 // Budget Routes
