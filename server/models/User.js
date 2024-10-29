@@ -43,7 +43,7 @@ class User {
 			return result ? new User(result) : null; // Return a new User instance if found
 		} catch (error) {
 			console.error("Error fetching user:", error); // Log the error for debugging
-			throw new Error("Database query failed");
+			throw new Error("Database query failed", error);
 		}
 	}
 

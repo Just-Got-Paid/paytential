@@ -12,6 +12,7 @@ import LoginPage from './pages/Login';
 import SignUpPage from './pages/SignUp';
 import Simulations from './pages/Simulations'
 import AvatarPage from './pages/Avatar';
+import Month from './components/Month'
 
 
 export default function App() {
@@ -36,6 +37,8 @@ export default function App() {
         <Route path='/users/:id' element={<UserPage />} />
         <Route path='/simulation' element={<Simulations />} />
         <Route path='/avatar/:sim-id' element={<AvatarPage />} />
+        <Route path='/month' element={<Month />} />
+
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </main>
