@@ -12,7 +12,7 @@ import LoginPage from './pages/Login';
 import SignUpPage from './pages/SignUp';
 import Simulations from './pages/Simulations'
 import AvatarPage from './pages/Avatar';
-import Month from './components/Month'
+import Month from './pages/Month'
 
 
 export default function App() {
@@ -34,10 +34,11 @@ export default function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/sign-up' element={<SignUpPage />} />
         <Route path='/users' element={<UsersPage />} />
+        <Route path='/month' element={<Month />} />
         <Route path='/users/:id' element={<UserPage />} />
+        <Route path='/set-up' element={<BudgetSelectionPage />} />
         <Route path='/simulation' element={<Simulations />} />
         <Route path='/avatar/:sim-id' element={<AvatarPage />} />
-        <Route path='/month' element={<Month />} />
 
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
